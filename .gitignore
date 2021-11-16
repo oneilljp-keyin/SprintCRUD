@@ -1,0 +1,13 @@
+.classpath
+.DS_Store
+
+.idea/
+.settings/
+target/
+
+src/User.java
+src/UserController.java
+src/UserRepository.java
+
+src/main/resources/application.properties
+target/classes/application.properties
