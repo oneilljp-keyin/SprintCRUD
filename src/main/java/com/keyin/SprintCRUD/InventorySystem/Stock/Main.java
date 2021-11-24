@@ -133,7 +133,8 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProductActionPerformed
-        // TODO add your handling code here:
+        Product p = new Product();
+        p.setVisible(true);
     }//GEN-LAST:event_jButtonProductActionPerformed
 
     private void jButtonPurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPurchaseActionPerformed
