@@ -4,14 +4,14 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.List;
 
 @Entity
-@Table(name="Memberships")
+@Table(name="memberships")
 public class Member {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private int member_id;
+  private Integer id;
   @NotBlank
   @NotNull
   private String name;
@@ -21,23 +21,23 @@ public class Member {
   @NotBlank
   @NotNull
   private String email;
-//  @NotBlank
+  @NotBlank
   @NotNull
   private String phone;
   @NotBlank
   @NotNull
-  private LocalDate membershipStartDate;
+  private LocalDate membership_start_date;
   @NotBlank
   @NotNull
-  private int membershipLength;
+  private Integer membership_length;
   @NotBlank
   @NotNull
-  private String membershipType;
+  private String membership_type;
 
   public Member() {}
 
   public Integer getId() {
-    return member_id;
+    return id;
   }
   public String getName() {
     return name;
@@ -52,13 +52,13 @@ public class Member {
     return phone;
   }
   public LocalDate getMembershipStartDate() {
-    return membershipStartDate;
+    return membership_start_date;
   }
-  public int getMembershipLength() {
-    return membershipLength;
+  public Integer getMembershipLength() {
+    return membership_length;
   }
   public String getMembershipType() {
-    return membershipType;
+    return membership_type;
   }
 
   public void setName(String name) {
@@ -74,26 +74,26 @@ public class Member {
     this.phone = phone;
   }
   public void setMembershipStartDate(LocalDate membershipStartDate) {
-    this.membershipStartDate = membershipStartDate;
+    this.membership_start_date = membershipStartDate;
   }
   public void setMembershipLength(Integer membershipLength) {
-    this.membershipLength = membershipLength;
+    this.membership_length = membershipLength;
   }
   public void setMembershipType(String membershipType) {
-    this.membershipType = membershipType;
+    this.membership_type = membershipType;
   }
 
   @Override
   public String toString() {
     return "Member{" +
-        "member_id=" + member_id +
+        "id=" + id +
         ", name='" + name + '\'' +
         ", address='" + address + '\'' +
         ", email='" + email + '\'' +
         ", phone='" + phone + '\'' +
-        ", membershipStartDate=" + membershipStartDate +
-        ", membershipLength=" + membershipLength +
-        ", membershipType='" + membershipType + '\'' +
+        ", membershipStartDate=" + membership_start_date +
+        ", membershipLength=" + membership_length +
+        ", membershipType='" + membership_type + '\'' +
         '}';
   }
 }

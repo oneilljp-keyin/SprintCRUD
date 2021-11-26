@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name="Tournaments")
@@ -25,7 +26,7 @@ public class Tournament {
   private Integer entry_fee;
   @NotBlank
   @NotNull
-  private Integer total_cash_price;
+  private Integer total_cash_prize;
 
   public void setLocation(String location) {
     this.location = location;
@@ -40,11 +41,8 @@ public class Tournament {
     this.entry_fee = entry_fee;
   }
   public void setTotal_cash_price(Integer total_cash_price) {
-    this.total_cash_price = total_cash_price;
+    this.total_cash_prize = total_cash_price;
   }
-
-
-
 
   public Integer getId() {
     return id;
@@ -62,7 +60,7 @@ public class Tournament {
     return entry_fee;
   }
   public Integer getTotal_cash_price() {
-    return total_cash_price;
+    return total_cash_prize;
   }
 
 }

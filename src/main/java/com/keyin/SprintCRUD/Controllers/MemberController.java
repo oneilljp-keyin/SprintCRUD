@@ -1,5 +1,7 @@
-package com.keyin.SprintCRUD.AccessingDataMySQL;
+package com.keyin.SprintCRUD.Controllers;
 
+import com.keyin.SprintCRUD.AccessingDataMySQL.Member;
+import com.keyin.SprintCRUD.AccessingDataMySQL.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,14 +15,14 @@ public class MemberController {
   @Autowired
   private MemberRepository memberRepository;
 
-  @GetMapping
-  public @ResponseBody Optional<Member> getMemberById(int id) {
-    return memberRepository.findById(id);
-  }
-
+//  @GetMapping(path="/{id}")
+//  public @ResponseBody Optional<Member> getMemberById(@PathParam("id") Integer id) {
+//    return memberRepository.findById(id);
+//  }
+//
   @PostMapping(path="/add")
   public @ResponseBody String addNewMember (String name, String address, String email,
-                                            String phone, LocalDate startDate, int lengthInMonths,
+                                            String phone, LocalDate startDate, Integer lengthInMonths,
                                             String membershipType) {
     Member n = new Member();
     n.setName(name);
@@ -35,8 +37,8 @@ public class MemberController {
   }
 
   @PatchMapping(path="/update")
-  public @ResponseBody String UpdateMemberById(int id, String name, String address, String email,
-                                               String phone, LocalDate startDate, int lengthInMonths,
+  public @ResponseBody String UpdateMemberById(Integer id, String name, String address, String email,
+                                               String phone, LocalDate startDate, Integer lengthInMonths,
                                                String membershipType) {
     Optional<Member> u = memberRepository.findById(id);
     if(u.isPresent()) {

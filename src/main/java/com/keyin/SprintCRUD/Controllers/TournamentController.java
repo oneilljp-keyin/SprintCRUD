@@ -1,5 +1,7 @@
-package com.keyin.SprintCRUD.AccessingDataMySQL;
+package com.keyin.SprintCRUD.Controllers;
 
+import com.keyin.SprintCRUD.AccessingDataMySQL.Tournament;
+import com.keyin.SprintCRUD.AccessingDataMySQL.TournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,14 +15,14 @@ public class TournamentController {
   @Autowired
   private TournamentRepository tournamentRepository;
 
-  @GetMapping
-  public @ResponseBody Optional<Tournament> getTournamentById(int id) {
-    return tournamentRepository.findById(id);
-  }
+//  @GetMapping
+//  public @ResponseBody Optional<Tournament> getTournamentById(int id) {
+//    return tournamentRepository.findById(id);
+//  }
 
   @PostMapping(path="/add")
   public @ResponseBody String addNewTournament (String location, LocalDate startDate, LocalDate endDate,
-                                                int entryFee, int totalCash) {
+                                                Integer entryFee, Integer totalCash) {
     Tournament n = new Tournament();
     n.setLocation(location);
     n.setStart_date(startDate);
