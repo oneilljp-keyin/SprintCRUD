@@ -11,7 +11,8 @@ import java.util.List;
 public class Member {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Integer id;
+  @Column(name="id")
+  private Integer Id;
   @NotBlank
   @NotNull
   private String name;
@@ -37,7 +38,7 @@ public class Member {
   public Member() {}
 
   public Integer getId() {
-    return id;
+    return Id;
   }
   public String getName() {
     return name;
@@ -86,7 +87,7 @@ public class Member {
   @Override
   public String toString() {
     return "Member{" +
-        "id=" + id +
+        "id=" + Id +
         ", name='" + name + '\'' +
         ", address='" + address + '\'' +
         ", email='" + email + '\'' +

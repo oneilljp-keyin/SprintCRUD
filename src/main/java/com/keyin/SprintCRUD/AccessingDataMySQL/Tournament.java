@@ -11,7 +11,8 @@ import java.util.List;
 public class Tournament {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Integer id;
+  @Column(name="id")
+  private Integer Id;
   @NotBlank
   @NotNull
   private String location;
@@ -45,7 +46,7 @@ public class Tournament {
   }
 
   public Integer getId() {
-    return id;
+    return Id;
   }
   public String getLocation() {
     return location;
