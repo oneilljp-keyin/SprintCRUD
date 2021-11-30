@@ -106,7 +106,7 @@ public class HTTPClient {
   // *****************************************************************
 
   public static String getAllTournaments(String category) {
-    return httpGetRequest("http://localhost:8080/" + category + "?sort=start_date");
+    return httpGetRequest("http://localhost:8080/" + category + "?sort=startDate");
   }
 
   public static String searchByLocationContains(String category, String searchQuery) {
