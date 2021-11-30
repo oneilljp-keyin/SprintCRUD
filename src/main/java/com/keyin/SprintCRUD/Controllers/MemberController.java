@@ -6,53 +6,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.Optional;
-
 @Controller
 @RequestMapping(path="/member")
 public class MemberController {
+  private final MemberRepository memberRepository;
   @Autowired
-  private MemberRepository memberRepository;
-
-//  @GetMapping(path="/{id}")
-//  public @ResponseBody Optional<Member> getMemberById(@PathParam("id") Integer id) {
-//    return memberRepository.findById(id);
-//  }
-//
-  @PostMapping(path="/add")
-  public @ResponseBody String addNewMember (String name, String address, String email,
-                                            String phone, LocalDate startDate, Integer lengthInMonths,
-                                            String membershipType) {
-    Member n = new Member();
-    n.setName(name);
-    n.setAddress(address);
-    n.setEmail(email);
-    n.setPhone(phone);
-    n.setMembershipStartDate(startDate);
-    n.setMembershipLength(lengthInMonths);
-    n.setMembershipType(membershipType);
-    memberRepository.save(n);
-    return "Member Saved";
+  public MemberController(MemberRepository memberRepository) {
+    this.memberRepository = memberRepository;
   }
 
-  @PatchMapping(path="/update")
-  public @ResponseBody String UpdateMemberById(Integer id, String name, String address, String email,
-                                               String phone, LocalDate startDate, Integer lengthInMonths,
-                                               String membershipType) {
-    Optional<Member> u = memberRepository.findById(id);
-    if(u.isPresent()) {
-      Member updatedMember = u.get();
-      if(name != null) {updatedMember.setName(name);}
-      if(address != null) {updatedMember.setAddress(address);}
-      if(email != null) {updatedMember.setEmail(email);}
-      if(phone != null) {updatedMember.setPhone(phone);}
-      if(startDate != null) {updatedMember.setMembershipStartDate(startDate);}
-      if(lengthInMonths != 0) {updatedMember.setMembershipLength(lengthInMonths);}
-      if(membershipType != null) {updatedMember.setMembershipType(membershipType);}
-      memberRepository.save(updatedMember);
-    }
-    return "Member Updated";
+  @PostMapping(path="/add")
+  public @ResponseBody String addNewMember (@RequestBody Member newMember) {
+    Member n = new Member();
+    n.setName(newMember.getName());
+    n.setAddress(newMember.getAddress());
+    n.setEmail(newMember.getEmail());
+    n.setPhone(newMember.getPhone());
+    n.setMembershipStartDate(newMember.getMembershipStartDate());
+    n.setMembershipLength(newMember.getMembershipLength());
+    n.setMembershipType(newMember.getMembershipType());
+    memberRepository.save(n);
+    return ("Member \""+ n.getName() +"\" Saved To Database");
+  }
+
+  @PutMapping(path="/update/{id}")
+  String UpdateMemberById(@RequestBody Member updateMember, @PathVariable Integer id) {
+    return memberRepository.findById(id)
+        .map(member -> {
+          member.setName(updateMember.getName());
+          member.setAddress(updateMember.getAddress());
+          member.setPhone(updateMember.getPhone());
+          member.setEmail(updateMember.getEmail());
+          member.setMembershipStartDate(updateMember.getMembershipStartDate());
+          member.setMembershipLength(updateMember.getMembershipLength());
+          member.setMembershipType(updateMember.getMembershipType());
+          memberRepository.save(member);
+          return "Member #" + id + ": " +member.getName() + " Updated";
+        }).orElseGet(() -> {
+          memberRepository.save(updateMember);
+          return "Member #" + id + ": " + updateMember.getName() + " Updated";
+        });
   }
 
   @DeleteMapping(path="/delete")

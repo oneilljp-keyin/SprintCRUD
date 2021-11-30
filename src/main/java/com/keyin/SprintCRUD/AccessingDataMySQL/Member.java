@@ -3,8 +3,6 @@ package com.keyin.SprintCRUD.AccessingDataMySQL;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name="memberships")
@@ -27,15 +25,13 @@ public class Member {
   private String phone;
   @NotBlank
   @NotNull
-  private LocalDate membership_start_date;
+  private String membership_start_date;
   @NotBlank
   @NotNull
   private Integer membership_length;
   @NotBlank
   @NotNull
   private String membership_type;
-
-  public Member() {}
 
   public Integer getId() {
     return Id;
@@ -52,7 +48,7 @@ public class Member {
   public String getPhone() {
     return phone;
   }
-  public LocalDate getMembershipStartDate() {
+  public String getMembershipStartDate() {
     return membership_start_date;
   }
   public Integer getMembershipLength() {
@@ -74,7 +70,7 @@ public class Member {
   public void setPhone(String phone) {
     this.phone = phone;
   }
-  public void setMembershipStartDate(LocalDate membershipStartDate) {
+  public void setMembershipStartDate(String membershipStartDate) {
     this.membership_start_date = membershipStartDate;
   }
   public void setMembershipLength(Integer membershipLength) {

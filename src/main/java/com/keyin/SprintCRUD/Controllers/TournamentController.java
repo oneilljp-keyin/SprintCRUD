@@ -6,47 +6,42 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.Optional;
-
 @Controller
 @RequestMapping(path="/tournament")
 public class TournamentController {
+  private final TournamentRepository tournamentRepository;
   @Autowired
-  private TournamentRepository tournamentRepository;
-
-//  @GetMapping
-//  public @ResponseBody Optional<Tournament> getTournamentById(int id) {
-//    return tournamentRepository.findById(id);
-//  }
-
-  @PostMapping(path="/add")
-  public @ResponseBody String addNewTournament (String location, LocalDate startDate, LocalDate endDate,
-                                                Integer entryFee, Integer totalCash) {
-    Tournament n = new Tournament();
-    n.setLocation(location);
-    n.setStart_date(startDate);
-    n.setEnd_date(endDate);
-    n.setEntry_fee(entryFee);
-    n.setTotal_cash_price(totalCash);
-    tournamentRepository.save(n);
-    return "Saved " + n;
+  public TournamentController(TournamentRepository tournamentRepository) {
+    this.tournamentRepository = tournamentRepository;
   }
 
-  @PatchMapping(path="/update")
-  public @ResponseBody String UpdateTournamentById(int id, String location, LocalDate startDate, LocalDate endDate,
-                                               int entryFee, int totalCash) {
-    Optional<Tournament> u = tournamentRepository.findById(id);
-    if(u.isPresent()) {
-      Tournament updateTournament = u.get();
-      if(location != null) {updateTournament.setLocation(location);}
-      if(startDate != null) {updateTournament.setStart_date(startDate);}
-      if(endDate != null) {updateTournament.setEnd_date(endDate);}
-      if(entryFee != 0) {updateTournament.setEntry_fee(entryFee);}
-      if(totalCash != 0) {updateTournament.setTotal_cash_price(totalCash);}
+  @PostMapping(path="/add")
+  public @ResponseBody String addNewTournament (@RequestBody Tournament newTournament) {
+    Tournament n = new Tournament();
+    n.setLocation(newTournament.getLocation());
+    n.setStart_date(newTournament.getStart_date());
+    n.setEnd_date(newTournament.getEnd_date());
+    n.setEntry_fee(newTournament.getEntry_fee());
+    n.setTotal_cash_prize(newTournament.getTotal_cash_prize());
+    tournamentRepository.save(n);
+    return ("Tournament at \"" + n.getLocation() + "\" on " + n.getStart_date() + "saved to database");
+  }
+
+  @PutMapping (path="/update/{id}")
+  String UpdateTournamentById(@RequestBody Tournament updateTournament, @PathVariable Integer id) {
+    return tournamentRepository.findById(id)
+    .map(tournament -> {
+      tournament.setLocation(updateTournament.getLocation());
+      tournament.setStart_date(updateTournament.getStart_date());
+      tournament.setEnd_date(updateTournament.getEnd_date());
+      tournament.setEntry_fee(updateTournament.getEntry_fee());
+      tournament.setTotal_cash_prize(updateTournament.getTotal_cash_prize());
       tournamentRepository.save(updateTournament);
-    }
-    return "Tournament Updated";
+      return ("Tournament at \"" + tournament.getLocation() +"\" starting on " + tournament.getStart_date() + " has been updated");
+    }).orElseGet(() -> {
+      tournamentRepository.save(updateTournament);
+      return ("Tournament at \"" + updateTournament.getLocation() +"\" starting on " + updateTournament.getStart_date() + " has been updated");
+    });
   }
 
   @DeleteMapping(path="/delete")
