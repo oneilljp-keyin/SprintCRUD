@@ -9,5 +9,5 @@ import java.util.List;
 @RepositoryRestResource(collectionResourceRel = "tournament", path = "tournament")
 public interface TournamentRepository extends PagingAndSortingRepository<Tournament, Integer> {
   List<Tournament> findByLocationContaining(@Param("searchQuery") String searchQuery);
-
+  List<Tournament> findByOrderByStartDateAsc();
 }

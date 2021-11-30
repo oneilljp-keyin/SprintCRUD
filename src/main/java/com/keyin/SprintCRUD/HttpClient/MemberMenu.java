@@ -1,5 +1,6 @@
 package com.keyin.SprintCRUD.HttpClient;
 
+import com.keyin.SprintCRUD.Utilities.Colours;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,13 +23,13 @@ public class MemberMenu {
   //output when a single member details is requested
   public static void singleMemberDisplay() throws JSONException {
     try {
-      System.out.println("Name: " + response.getString("name"));
-      System.out.println("Address: " + response.getString("address"));
-      System.out.println("Phone: (" + response.getString("phone").substring(0, 3) + ") " + response.getString("phone").substring(3, 6) + "-" + response.getString("phone").substring(6, 10));
-      System.out.println("E-mail: " + response.getString("email"));
-      System.out.println("Membership Type: " + response.getString("membershipType"));
-      System.out.println("Membership Start Date: " + response.getString("membershipStartDate"));
-      System.out.println("Membership Length: " + response.getInt("membershipLength") + " mon.");
+      System.out.print(Colours.YEL_BR + "Name: " + Colours.RESET + response.getString("name"));
+      System.out.println(Colours.YEL_BR + "    Address: " + Colours.RESET + response.getString("address"));
+      System.out.print(Colours.YEL_BR + "Phone: " + Colours.RESET + "(" + response.getString("phone").substring(0, 3) + ") " + response.getString("phone").substring(3, 6) + "-" + response.getString("phone").substring(6, 10));
+      System.out.println(Colours.YEL_BR + "    E-mail: " + Colours.RESET + response.getString("email"));
+      System.out.print(Colours.YEL_BR + "Membership Type: " + Colours.RESET + response.getString("membershipType"));
+      System.out.print(Colours.YEL_BR + "    Start Date: " + Colours.RESET + response.getString("membershipStartDate"));
+      System.out.println(Colours.YEL_BR + "    Length: " + Colours.RESET + response.getInt("membershipLength") + " mon.");
     } catch (JSONException e) {
       System.out.println(JSONErrorConverter(e));
     }
@@ -152,7 +153,7 @@ public class MemberMenu {
     }
     try {
       response = new JSONObject(HTTPClient.searchById("member", memberNumber));
-      Integer n = response.length();
+      int n = response.length();
       if (n > 0) {
         singleMemberDisplay();
         menuSelection();
@@ -165,53 +166,57 @@ public class MemberMenu {
   }
 
   public static void getAllMembers(JSONArray responseData) throws JSONException {
-    int n = responseData.length();
-    if (n < 1) {
+    if (responseData == null) {
       System.out.println("No Member(s) Found");
     } else {
       // output of members list
-    System.out.println(memberHeader);
-    for (int i = 0; i < n; i++) {
-      final JSONObject member = responseData.getJSONObject(i);
-      if (member.getInt("id") < 9) {
-        System.out.print(" ");
-      }
-      System.out.print(" " + member.getInt("id") + " ");
-      System.out.print(" | " + member.getString("name") + " ".repeat(23 - member.getString("name").length()));
-      System.out.print(" | ");
-      if (member.getString("address").length() < 20) {
-        System.out.print(member.getString("address") + " ".repeat(23 - member.getString("address").length()));
-      } else {
-        System.out.print(member.getString("address").substring(0, 20) + "...");
-      }
-      System.out.print(" | (" + member.getString("phone").substring(0, 3) + ") " + member.getString("phone").substring(3, 6) + "-" + member.getString("phone").substring(6, 10));
+      int n = responseData.length();
+      System.out.println(memberHeader);
+      for (int i = 0; i < n; i++) {
+        final JSONObject member = responseData.getJSONObject(i);
+        if (member.getInt("id") < 9) {
+          System.out.print(" ");
+        }
+        System.out.print(" " + Colours.BLU_BR + member.getInt("id") + Colours.RESET + " ");
+        System.out.print(" | " + member.getString("name") + " ".repeat(23 - member.getString("name").length()));
+        System.out.print(" | ");
+        if (member.getString("address").length() < 20) {
+          System.out.print(member.getString("address") + " ".repeat(23 - member.getString("address").length()));
+        } else {
+          System.out.print(member.getString("address").substring(0, 20) + "...");
+        }
+        System.out.print(" | (" + member.getString("phone").substring(0, 3) + ") " + member.getString("phone").substring(3, 6) + "-" + member.getString("phone").substring(6, 10));
 
-      System.out.print(" | ");
-      if (member.getString("email").length() < 20) {
-        System.out.print(member.getString("email") + " ".repeat(23 - member.getString("email").length()));
-      } else {
-        System.out.print(member.getString("email").substring(0, 20) + "...");
-      }
+        System.out.print(" | ");
+        if (member.getString("email").length() < 20) {
+          System.out.print(member.getString("email") + " ".repeat(23 - member.getString("email").length()));
+        } else {
+          System.out.print(member.getString("email").substring(0, 20) + "...");
+        }
 
-      System.out.print(" | " + member.getString("membershipType") + " ".repeat(7 - member.getString("membershipType").length()));
-      System.out.print(" | " + member.getString("membershipStartDate") + " | ");
-      if (member.getInt("membershipLength") < 10) {System.out.print(" ");}
-      System.out.println(member.getInt("membershipLength") + " mon. |");
-    }
-    System.out.println("-".repeat(134));
-    while (true) {
-      int numberCheck;
-      System.out.print("To view or edit member info, enter # beside name and press enter, or press enter to return: ");
-      String memberNumber = scan.nextLine();
+        System.out.print(" | " + member.getString("membershipType") + " ".repeat(7 - member.getString("membershipType").length()));
+        System.out.print(" | " + member.getString("membershipStartDate") + " | ");
+        if (member.getInt("membershipLength") < 10) {System.out.print(" ");}
+        System.out.println(member.getInt("membershipLength") + " mon. |");
+      }
       System.out.println("-".repeat(134));
-      try {
-        numberCheck = Integer.parseInt(memberNumber);
-      } catch (NumberFormatException nfe) {
-        break;
+      while (true) {
+        System.out.print("To view or edit member info, " + Colours.RED_BOL + "enter # beside name" + Colours.RESET +
+            " and press enter, or " + Colours.RED_BOL + "\"R\"" + Colours.RESET + " and enter to return: ");
+        String memberNumber = scan.nextLine();
+        System.out.println("-".repeat(134));
+        if (memberNumber.equalsIgnoreCase("r")) {
+          break;
+        } else {
+          getMemberInfoById(Integer.parseInt(memberNumber));
+        }
+//        try {
+//          int numberCheck = Integer.parseInt(memberNumber);
+//        } catch (NumberFormatException nfe) {
+//          break;
+//        } finally {
+//        }
       }
-      getMemberInfoById(numberCheck);
-      break;
-    }
     }
 
   }

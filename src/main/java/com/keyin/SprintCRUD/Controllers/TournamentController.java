@@ -19,12 +19,12 @@ public class TournamentController {
   public @ResponseBody String addNewTournament (@RequestBody Tournament newTournament) {
     Tournament n = new Tournament();
     n.setLocation(newTournament.getLocation());
-    n.setStart_date(newTournament.getStart_date());
-    n.setEnd_date(newTournament.getEnd_date());
+    n.setStartDate(newTournament.getStartDate());
+    n.setEndDate(newTournament.getEndDate());
     n.setEntry_fee(newTournament.getEntry_fee());
     n.setTotal_cash_prize(newTournament.getTotal_cash_prize());
     tournamentRepository.save(n);
-    return ("Tournament at \"" + n.getLocation() + "\" on " + n.getStart_date() + "saved to database");
+    return ("Tournament at \"" + n.getLocation() + "\" on " + n.getStartDate() + "saved to database");
   }
 
   @PutMapping (path="/update/{id}")
@@ -32,15 +32,15 @@ public class TournamentController {
     return tournamentRepository.findById(id)
     .map(tournament -> {
       tournament.setLocation(updateTournament.getLocation());
-      tournament.setStart_date(updateTournament.getStart_date());
-      tournament.setEnd_date(updateTournament.getEnd_date());
+      tournament.setStartDate(updateTournament.getStartDate());
+      tournament.setEndDate(updateTournament.getEndDate());
       tournament.setEntry_fee(updateTournament.getEntry_fee());
       tournament.setTotal_cash_prize(updateTournament.getTotal_cash_prize());
       tournamentRepository.save(updateTournament);
-      return ("Tournament at \"" + tournament.getLocation() +"\" starting on " + tournament.getStart_date() + " has been updated");
+      return ("Tournament at \"" + tournament.getLocation() +"\" starting on " + tournament.getStartDate() + " has been updated");
     }).orElseGet(() -> {
       tournamentRepository.save(updateTournament);
-      return ("Tournament at \"" + updateTournament.getLocation() +"\" starting on " + updateTournament.getStart_date() + " has been updated");
+      return ("Tournament at \"" + updateTournament.getLocation() +"\" starting on " + updateTournament.getStartDate() + " has been updated");
     });
   }
 

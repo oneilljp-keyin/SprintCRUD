@@ -13,6 +13,7 @@ public class MainMenu {
 
   private static JSONArray responseData;
 
+
   public static String JSONErrorConverter(JSONException e) {
     StringWriter sw = new StringWriter();
     e.printStackTrace(new PrintWriter(sw));
@@ -24,30 +25,30 @@ public class MainMenu {
 
     // Main Menu
     while (true) {
-      System.out.println("#".repeat(76));
-      System.out.println("#                  Welcome to to The Golf Club - Main Menu                 #");
-      System.out.println("#                  Press \"enter/return\" after every entry                  #");
-      System.out.println("#".repeat(76));
-      System.out.println("|             Press \"M\" for Members, Press \"T\" for Tournaments             |");
-      System.out.println("|                            Press \"Q\" to Quit                             |");
-      System.out.println("-".repeat(76));
-      String categorySelection = scan.nextLine();
+      System.out.println(" ".repeat(29) + "#".repeat(76));
+      System.out.println(" ".repeat(29) + "#                  Welcome to to The Golf Club - Main Menu                 #");
+      System.out.println(" ".repeat(29) + "#                  Press \"enter/return\" after every entry                  #");
+      System.out.println(" ".repeat(29) + "#".repeat(76));
+      System.out.println(" ".repeat(29) + "|             Press \"M\" for Members, Press \"T\" for Tournaments             |");
+      System.out.println(" ".repeat(29) + "|                            Press \"Q\" to Quit                             |");
+      System.out.println(" ".repeat(29) + "-".repeat(76));
+      System.out.print(" ".repeat(67)); String categorySelection = scan.nextLine();
 
       // Members Menu
       if (categorySelection.equalsIgnoreCase("m")) {
         while (true) {
-          System.out.println("#".repeat(76));
-          System.out.println("#                     The Golf Club - Members Section                      #");
-          System.out.println("#                  Press \"enter/return\" after every entry                  #");
-          System.out.println("#".repeat(76));
-          System.out.println("|                     Press \"N\" to enter a new member                      |");
-          System.out.println("|             Press \"F\" to search by first letter of the name              |");
-          System.out.println("|                       Press \"S\" to search by name                        |");
-          System.out.println("|                      Press \"A\" to list all members                       |");
-//          System.out.println("|                     Press \"M\" to search by member #                      |");
-          System.out.println("|                     Press \"R\" to return to main menu                     |");
-          System.out.println("-".repeat(76));
-          String nextSelection = scan.nextLine();
+          System.out.println(" ".repeat(29) + "#".repeat(76));
+          System.out.println(" ".repeat(29) + "#                     The Golf Club - Members Section                      #");
+          System.out.println(" ".repeat(29) + "#                  Press \"enter/return\" after every entry                  #");
+          System.out.println(" ".repeat(29) + "#".repeat(76));
+          System.out.println(" ".repeat(29) + "|                     Press \"N\" to enter a new member                      |");
+          System.out.println(" ".repeat(29) + "|             Press \"F\" to search by first letter of the name              |");
+          System.out.println(" ".repeat(29) + "|                       Press \"S\" to search by name                        |");
+          System.out.println(" ".repeat(29) + "|                      Press \"A\" to list all members                       |");
+//          System.out.println(" ".repeat(29) + "|                     Press \"M\" to search by member #                      |");
+          System.out.println(" ".repeat(29) + "|                     Press \"R\" to return to main menu                     |");
+          System.out.println(" ".repeat(29) + "-".repeat(76));
+          System.out.print(" ".repeat(67)); String nextSelection = scan.nextLine();
           // return to Main Menu
           if (nextSelection.equalsIgnoreCase("r")) {
             break;
@@ -55,7 +56,18 @@ public class MainMenu {
             MemberMenu.newMember();
           } else {
             JSONObject response;
-            if (nextSelection.equalsIgnoreCase("s")) {
+            // Search By First Letter (Alphabetical)
+            if (nextSelection.equalsIgnoreCase("f")) {
+              System.out.print("Enter Letter to Search By: ");
+              String firstLetter = scan.nextLine();
+              try {
+                response = new JSONObject(HTTPClient.searchByFirstLetter("member", firstLetter));
+                responseData = response.getJSONObject("_embedded").getJSONArray("member");
+              } catch (JSONException e) {
+                System.out.println(JSONErrorConverter(e));
+              }
+            // Search By Name
+            } else if (nextSelection.equalsIgnoreCase("s")) {
               System.out.print("Enter a name (first or last) to search by: ");
               String queryString = scan.nextLine();
               try {
@@ -64,6 +76,7 @@ public class MainMenu {
               } catch (JSONException e) {
                 System.out.println(JSONErrorConverter(e));
               }
+            // Display All
             } else if (nextSelection.equalsIgnoreCase("a")) {
               try {
                 response = new JSONObject(HTTPClient.getAllMembers("member"));
@@ -71,6 +84,7 @@ public class MainMenu {
               } catch (JSONException e) {
                 System.out.println(JSONErrorConverter(e));
               }
+            // Retrieve Member Info by ID
             } else if (nextSelection.equalsIgnoreCase("M")) {
               MemberMenu.getMemberInfoById(-1);
             } else {
@@ -79,19 +93,20 @@ public class MainMenu {
             MemberMenu.getAllMembers(responseData);
           }
         }
+      // Tournament Section
       } else if (categorySelection.equalsIgnoreCase("t")) {
         while (true) {
-          System.out.println("#".repeat(76));
-          System.out.println("#                   The Golf Club - Tournaments Section                    #");
-          System.out.println("#                  Press \"enter/return\" after every entry                  #");
-          System.out.println("#".repeat(76));
-          System.out.println("|                   Press \"N\" to enter a new tournament                    |");
-          System.out.println("|                      Press \"L\" to search by location                     |");
-          System.out.println("|                    Press \"A\" to list all tournaments                     |");
-//          System.out.println("|                       Press \"D\" to search by date                        |");
-          System.out.println("|                     Press \"R\" to return to main menu                     |");
-          System.out.println("-".repeat(76));
-          String nextSelection = scan.nextLine();
+          System.out.println(" ".repeat(29) + "#".repeat(76));
+          System.out.println(" ".repeat(29) + "#                   The Golf Club - Tournaments Section                    #");
+          System.out.println(" ".repeat(29) + "#                  Press \"enter/return\" after every entry                  #");
+          System.out.println(" ".repeat(29) + "#".repeat(76));
+          System.out.println(" ".repeat(29) + "|                   Press \"N\" to enter a new tournament                    |");
+          System.out.println(" ".repeat(29) + "|                      Press \"L\" to search by location                     |");
+          System.out.println(" ".repeat(29) + "|                    Press \"A\" to list all tournaments                     |");
+//          System.out.println(" ".repeat(29) + "|                       Press \"D\" to search by date                        |");
+          System.out.println(" ".repeat(29) + "|                     Press \"R\" to return to main menu                     |");
+          System.out.println(" ".repeat(29) + "-".repeat(76));
+          System.out.print(" ".repeat(67)); String nextSelection = scan.nextLine();
           if (nextSelection.equalsIgnoreCase("r")) {
             break;
           } else if (nextSelection.equalsIgnoreCase("n")) {

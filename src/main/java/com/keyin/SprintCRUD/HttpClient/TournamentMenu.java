@@ -1,5 +1,6 @@
 package com.keyin.SprintCRUD.HttpClient;
 
+import com.keyin.SprintCRUD.Utilities.Colours;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,9 +11,8 @@ import static com.keyin.SprintCRUD.HttpClient.MainMenu.JSONErrorConverter;
 
 public class TournamentMenu {
   // header when list of members is selected
-  final static String tournamentHeader = "  #  | Location:" + " ".repeat(18) + "|   Start:   " +
-      "|    End:    " + "| Entry Fee: |  Prize Total: |\n" +
-      "-".repeat(134);
+  final static String tournamentHeader = " ".repeat(22) + "  #  | Location:" + " ".repeat(18) + "|   Start:   " +
+      "|    End:    " + "| Entry Fee: |  Prize Total: |\n" + " ".repeat(22) + "-".repeat(90);
   private static JSONObject response;
 
   private static final Scanner scan = new Scanner(System.in);
@@ -20,11 +20,11 @@ public class TournamentMenu {
   // output when a single tournament details is requested
   public static void singleTournamentDisplay() throws JSONException {
     try {
-      System.out.println("Location: " + response.getString("location"));
-      System.out.println("Start Date: " + response.getString("start_date"));
-      System.out.println("End Date: " + response.getString("end_date"));
-      System.out.println("Entry Fee: " + response.getString("entry_fee"));
-      System.out.println("Prize Total: " + response.getString("total_cash_prize"));
+      System.out.print(" ".repeat(22) + Colours.YEL_BR + "Location: " + Colours.RESET + response.getString("location"));
+      System.out.print("    " + Colours.YEL_BR + "Start Date: " + Colours.RESET + response.getString("start_date"));
+      System.out.println("     " + Colours.YEL_BR + "End Date: " + Colours.RESET + response.getString("end_date"));
+      System.out.print(" ".repeat(22) + Colours.YEL_BR + "Entry Fee: $" + Colours.RESET + response.getString("entry_fee"));
+      System.out.println(" ".repeat(22) + Colours.YEL_BR + "Prize Total: $" + Colours.RESET + response.getString("total_cash_prize"));
     } catch (JSONException e) {
       System.out.println(JSONErrorConverter(e));
     }
@@ -45,7 +45,7 @@ public class TournamentMenu {
     } catch (JSONException e) {
       System.out.println(JSONErrorConverter(e));
     }
-    System.out.println("-".repeat(134));
+    System.out.println("-".repeat(90));
   }
 
   // output to change/update tournament information
@@ -96,7 +96,7 @@ public class TournamentMenu {
     System.out.print("Prize Total: ");
     String newTotalCashPrize = scan.nextLine();
 
-    String insertResponse = HTTPClient.insertNewTournament(newLocation, newStartDate, newEntryFee, newEndDate, newTotalCashPrize, "tournament");
+    String insertResponse = HTTPClient.insertNewTournament(newLocation, newStartDate, newEntryFee, newEndDate, newTotalCashPrize);
     System.out.println(insertResponse);
 
   }
@@ -104,10 +104,12 @@ public class TournamentMenu {
   // output of menu to select options to edit or delete tournament
   public static void menuSelection() throws JSONException {
     while (true) {
-      System.out.println("-".repeat(134));
-      System.out.print("Press \"E\" to edit, \"D\" to delete, or \"R\" to return to previous menu ");
+      System.out.println(" ".repeat(22) + "-".repeat(90));
+      System.out.print(" ".repeat(22) + "Press " + Colours.RED_BR + "\"E\"" + Colours.RESET + " to edit, "
+          + Colours.RED_BR + "\"D\"" + Colours.RESET + " to delete, or " + Colours.RED_BR + "\"R\""
+          + Colours.RESET + " to return to previous menu ");
       String editCheck = scan.nextLine();
-      System.out.println("-".repeat(134));
+      System.out.println(" ".repeat(22) + "-".repeat(90));
       if (editCheck.equalsIgnoreCase("e")) {
         editTournament();
       } else if (editCheck.equalsIgnoreCase("d")) {
@@ -116,7 +118,7 @@ public class TournamentMenu {
       } else if (editCheck.equalsIgnoreCase("r")) {
         break;
       } else {
-        System.out.println("Invalid Selection");
+        System.out.println(" ".repeat(22) + "Invalid Selection");
       }
     }
   }
@@ -127,7 +129,7 @@ public class TournamentMenu {
     if (memberId < 0) {
       System.out.print("Enter tournament #: ");
       tournamentNumber = scan.nextLine();
-      System.out.println("-".repeat(134));
+      System.out.println(" ".repeat(22) + "-".repeat(90));
     } else {
       tournamentNumber = memberId.toString();
     }
@@ -157,26 +159,36 @@ public class TournamentMenu {
       if (tournament.getInt("id") < 10) {
         System.out.print(" ");
       }
-      System.out.print(" " + tournament.getInt("id") + " ");
+      System.out.print(" ".repeat(22) + " " + Colours.BLU_BR + tournament.getInt("id") + Colours.RESET + " ");
       System.out.print(" | " + tournament.getString("location") + " ".repeat(26 - tournament.getString("location").length()));
       System.out.print(" | " + tournament.getString("start_date"));
-      System.out.print(" | " + tournament.getString("end_date"));
-      System.out.print(" | $" + tournament.getString("entry_fee"));
-      System.out.println(" | $" + tournament.getString("total_cash_prize"));
-    }
-    System.out.println("-".repeat(134));
-    while (true) {
-      int numberCheck;
-      System.out.print("To view or edit tournament info, enter # beside tournament and press enter, or press enter to return: ");
-      String memberNumber = scan.nextLine();
-      System.out.println("-".repeat(134));
-      try {
-        numberCheck = Integer.parseInt(memberNumber);
-      } catch (NumberFormatException nfe) {
-        break;
+      System.out.print(" | " + tournament.getString("end_date") + " | ");
+      if (tournament.getInt("entry_fee") < 10) {
+        System.out.print("  ");
+      } else if (tournament.getInt("entry_fee") < 100) {
+        System.out.print(" ");
       }
-      getTournamentInfoById(numberCheck);
-      break;
+      System.out.print("   $" + tournament.getString("entry_fee") + "    | ");
+      if (tournament.getInt("total_cash_prize") < 10) {
+        System.out.print("   ");
+      } else if (tournament.getInt("total_cash_prize") < 100) {
+        System.out.print("  ");
+      } else if (tournament.getInt("total_cash_prize") < 1000) {
+        System.out.print(" ");
+      }
+      System.out.println("    $" + tournament.getString("total_cash_prize") + "     |");
+    }
+    System.out.println(" ".repeat(22) + "-".repeat(90));
+    while (true) {
+      System.out.print(" ".repeat(20) + "To view or edit member info, " + Colours.RED_BOL + "enter # beside name" + Colours.RESET +
+          " and press enter, or " + Colours.RED_BOL + "\"R\"" + Colours.RESET + " and enter to return: ");
+      String tournamentNumber = scan.nextLine();
+      System.out.println(" ".repeat(22) + "-".repeat(90));
+      if (tournamentNumber.equalsIgnoreCase("r")) {
+        break;
+      } else {
+        getTournamentInfoById(Integer.parseInt(tournamentNumber));
+      }
     }
     }
 

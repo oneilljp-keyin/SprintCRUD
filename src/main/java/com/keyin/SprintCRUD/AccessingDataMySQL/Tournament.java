@@ -16,10 +16,10 @@ public class Tournament {
   private String location;
   @NotBlank
   @NotNull
-  private String start_date;
+  private String startDate;
   @NotBlank
   @NotNull
-  private String end_date;
+  private String endDate;
   @NotBlank
   @NotNull
   private Integer entry_fee;
@@ -30,11 +30,11 @@ public class Tournament {
   public void setLocation(String location) {
     this.location = location;
   }
-  public void setStart_date(String start_date) {
-    this.start_date = start_date;
+  public void setStartDate(String start_date) {
+    this.startDate = start_date;
   }
-  public void setEnd_date(String end_date) {
-    this.end_date = end_date;
+  public void setEndDate(String end_date) {
+    this.endDate = end_date;
   }
   public void setEntry_fee(Integer entry_fee) {
     this.entry_fee = entry_fee;
@@ -49,11 +49,11 @@ public class Tournament {
   public String getLocation() {
     return location;
   }
-  public String getStart_date() {
-    return start_date;
+  public String getStartDate() {
+    return startDate;
   }
-  public String getEnd_date() {
-    return end_date;
+  public String getEndDate() {
+    return endDate;
   }
   public Integer getEntry_fee() {
     return entry_fee;
