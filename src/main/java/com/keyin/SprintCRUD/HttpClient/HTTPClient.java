@@ -114,7 +114,7 @@ public class HTTPClient {
   }
 
   public static String searchByDate(String category, String searchDate) {
-    return httpGetRequest("http://localhost:8080/" + category + "/search/findByStart_dateEquals?searchDate=" + searchDate);
+    return httpGetRequest("http://localhost:8080/" + category + "/search/findByStartDate?searchDate=" + searchDate);
   }
 
   public static String insertNewTournament(String location, String start_date, String end_date,
@@ -142,8 +142,8 @@ public class HTTPClient {
   //                      Result URI Constructors
   // *****************************************************************
 
-  public static String getResultsByMemberId(int memberId) {
-    return null;
+  public static String getResultsByMemberId(String category, Integer memberId) {
+    return httpGetRequest("http://localhost:8080/" + category + "/member/" + memberId);
   }
 
   public static String getResultsByTournamentId(int tournamentId) {

@@ -27,10 +27,10 @@ public class Result {
   public Integer getResult() {
     return result;
   }
-  public Tournament getTournamentId() {
+  public Tournament getTournament() {
     return tournament;
   }
-  public Member getMemberId() {
+  public Member getMember() {
     return member;
   }
 

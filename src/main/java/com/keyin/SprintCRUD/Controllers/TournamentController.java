@@ -54,5 +54,4 @@ public class TournamentController {
   public @ResponseBody Iterable<Tournament> getAllTournaments() {
     return tournamentRepository.findAll();
   }
-
 }

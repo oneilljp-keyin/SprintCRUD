@@ -161,8 +161,8 @@ public class TournamentMenu {
       }
       System.out.print(" ".repeat(22) + " " + Colours.BLU_BR + tournament.getInt("id") + Colours.RESET + " ");
       System.out.print(" | " + tournament.getString("location") + " ".repeat(26 - tournament.getString("location").length()));
-      System.out.print(" | " + tournament.getString("start_date"));
-      System.out.print(" | " + tournament.getString("end_date") + " | ");
+      System.out.print(" | " + tournament.getString("startDate"));
+      System.out.print(" | " + tournament.getString("endDate") + " | ");
       if (tournament.getInt("entry_fee") < 10) {
         System.out.print("  ");
       } else if (tournament.getInt("entry_fee") < 100) {

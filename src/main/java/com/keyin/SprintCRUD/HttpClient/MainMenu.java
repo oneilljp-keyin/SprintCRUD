@@ -50,14 +50,14 @@ public class MainMenu {
           System.out.println(" ".repeat(29) + "-".repeat(76));
           System.out.print(" ".repeat(67)); String nextSelection = scan.nextLine();
           // return to Main Menu
-          if (nextSelection.equalsIgnoreCase("r")) {
+          if (nextSelection.equalsIgnoreCase("R")) {
             break;
-          } else if (nextSelection.equalsIgnoreCase("n")) {
+          } else if (nextSelection.equalsIgnoreCase("N")) {
             MemberMenu.newMember();
           } else {
             JSONObject response;
             // Search By First Letter (Alphabetical)
-            if (nextSelection.equalsIgnoreCase("f")) {
+            if (nextSelection.equalsIgnoreCase("F")) {
               System.out.print("Enter Letter to Search By: ");
               String firstLetter = scan.nextLine();
               try {
@@ -67,7 +67,7 @@ public class MainMenu {
                 System.out.println(JSONErrorConverter(e));
               }
             // Search By Name
-            } else if (nextSelection.equalsIgnoreCase("s")) {
+            } else if (nextSelection.equalsIgnoreCase("S")) {
               System.out.print("Enter a name (first or last) to search by: ");
               String queryString = scan.nextLine();
               try {
@@ -77,7 +77,7 @@ public class MainMenu {
                 System.out.println(JSONErrorConverter(e));
               }
             // Display All
-            } else if (nextSelection.equalsIgnoreCase("a")) {
+            } else if (nextSelection.equalsIgnoreCase("A")) {
               try {
                 response = new JSONObject(HTTPClient.getAllMembers("member"));
                 responseData = response.getJSONObject("_embedded").getJSONArray("member");

@@ -1,5 +1,6 @@
 package com.keyin.SprintCRUD.HttpClient;
 
+import com.keyin.SprintCRUD.AccessingDataMySQL.MemberRepository;
 import com.keyin.SprintCRUD.Utilities.Colours;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,21 +16,56 @@ public class MemberMenu {
       "  #  | Name:" + " ".repeat(19) + "| Address:" + " ".repeat(16) +  "| Phone:" + " ".repeat(9) +
       "| Email:" + " ".repeat(18) + "|  Type:" + "  |   Start:" + "   | Length: |" + " ".repeat(4) + "\n" +
       "-".repeat(134);
-  private static JSONObject response;
-
+  private static JSONObject MemberResponse;
 
   private static final Scanner scan = new Scanner(System.in);
 
   //output when a single member details is requested
   public static void singleMemberDisplay() throws JSONException {
     try {
-      System.out.print(Colours.YEL_BR + "Name: " + Colours.RESET + response.getString("name"));
-      System.out.println(Colours.YEL_BR + "    Address: " + Colours.RESET + response.getString("address"));
-      System.out.print(Colours.YEL_BR + "Phone: " + Colours.RESET + "(" + response.getString("phone").substring(0, 3) + ") " + response.getString("phone").substring(3, 6) + "-" + response.getString("phone").substring(6, 10));
-      System.out.println(Colours.YEL_BR + "    E-mail: " + Colours.RESET + response.getString("email"));
-      System.out.print(Colours.YEL_BR + "Membership Type: " + Colours.RESET + response.getString("membershipType"));
-      System.out.print(Colours.YEL_BR + "    Start Date: " + Colours.RESET + response.getString("membershipStartDate"));
-      System.out.println(Colours.YEL_BR + "    Length: " + Colours.RESET + response.getInt("membershipLength") + " mon.");
+      System.out.print(  Colours.YEL_BR + " ".repeat(30) + "Name: " + Colours.RESET + MemberResponse.getString("name") + " ".repeat(21 - MemberResponse.getString("name").length()));
+      System.out.println(Colours.YEL_BR + "Address: " + Colours.RESET + MemberResponse.getString("address"));
+      System.out.print(  Colours.YEL_BR + " ".repeat(30) +  "Phone: " + Colours.RESET + "(" + MemberResponse.getString("phone").substring(0, 3) +
+          ") " + MemberResponse.getString("phone").substring(3, 6) + "-" + MemberResponse.getString("phone").substring(6, 10));
+      System.out.println(Colours.YEL_BR + "      E-mail: " + Colours.RESET + MemberResponse.getString("email"));
+      System.out.print(  Colours.YEL_BR + " ".repeat(30) + "Membership Type: " + Colours.RESET + MemberResponse.getString("membershipType"));
+      System.out.print(  Colours.YEL_BR + "    Start Date: " + Colours.RESET + MemberResponse.getString("membershipStartDate"));
+      System.out.println(Colours.YEL_BR + "    Length: " + Colours.RESET + MemberResponse.getInt("membershipLength") + " mon.");
+    } catch (JSONException e) {
+      System.out.println(JSONErrorConverter(e));
+    }
+  }
+
+  // retrieve tournament Results
+  public static void ListOfResultsByMember() {
+    try {
+      JSONArray resultsResponse = new JSONArray(HTTPClient.getResultsByMemberId("results", MemberResponse.getInt("id")));
+      int n = resultsResponse.length();
+      if (n < 1) {
+        System.out.println(" ".repeat(50) + "*** No Tournament Results Found ***");
+      } else {
+        System.out.println(" ".repeat(45) + "Tournament Results for " + MemberResponse.getString("name") + " [" + MemberResponse.getString("id") + "]");
+        System.out.println(" ".repeat(39) + "|    Date:   |        Location:        |  Result: |");
+        for (int i = 0; i < n; i++) {
+          final JSONObject result = resultsResponse.getJSONObject(i);
+          System.out.print(" ".repeat(39) + "| " + result.getJSONObject("tournament").getString("startDate"));
+          System.out.print(" | " + result.getJSONObject("tournament").getString("location") +
+              " ".repeat(24 - result.getJSONObject("tournament").getString("location").length()) + "| ");
+          if (result.getInt("result") < 10) {System.out.print(" ");}
+          System.out.print("  " + result.getInt("result"));
+          if (result.getInt("result") % 10 == 1) {
+            System.out.print("st");
+          } else if (result.getInt("result") % 10 == 2) {
+            System.out.print("nd");
+          } else if (result.getInt("result") % 10 == 3) {
+            System.out.print("rd");
+          } else {
+            System.out.print("th");
+          }
+          System.out.println("   |");
+        }
+      System.out.println("-".repeat(134));
+      }
     } catch (JSONException e) {
       System.out.println(JSONErrorConverter(e));
     }
@@ -38,11 +74,11 @@ public class MemberMenu {
   // output to confirm deletion of member
   public static void deleteMember() {
     try {
-      System.out.print("Are you sure you want to delete member " + response.getString("name") +
-          " [" + response.getString("id") + "]? (Type \"Yes\" to Confirm): ");
+      System.out.print("Are you sure you want to delete member " + MemberResponse.getString("name") +
+          " [" + MemberResponse.getString("id") + "]? (Type \"Yes\" to Confirm): ");
       String deleteMember = scan.nextLine();
       if (deleteMember.equalsIgnoreCase("yes")) {
-        String deleteResponse = HTTPClient.deleteById("member", response.getString("id"));
+        String deleteResponse = HTTPClient.deleteById("member", MemberResponse.getString("id"));
         System.out.println(deleteResponse);
       } else {
         System.out.println("Member NOT deleted");
@@ -57,35 +93,35 @@ public class MemberMenu {
   public static void editMember() throws JSONException {
     System.out.println("Press enter to keep the field the same");
 
-    System.out.print("Name [" + response.getString("name") + "]: ");
+    System.out.print("Name [" + MemberResponse.getString("name") + "]: ");
     String updatedName = scan.nextLine();
-    if (updatedName.equals("")) updatedName = response.getString("name");
+    if (updatedName.equals("")) updatedName = MemberResponse.getString("name");
 
-    System.out.print("Address [" + response.getString("address") + "]: ");
+    System.out.print("Address [" + MemberResponse.getString("address") + "]: ");
     String updatedAddress = scan.nextLine();
-    if (updatedAddress.equals("")) updatedAddress = response.getString("address");
+    if (updatedAddress.equals("")) updatedAddress = MemberResponse.getString("address");
 
-    System.out.print("Phone [" + response.getString("phone") + "]: ");
+    System.out.print("Phone [" + MemberResponse.getString("phone") + "]: ");
     String updatedPhone = scan.nextLine();
-    if (updatedPhone.equals("")) updatedPhone = response.getString("phone");
+    if (updatedPhone.equals("")) updatedPhone = MemberResponse.getString("phone");
 
-    System.out.print("E-mail [" + response.getString("email") + "]: ");
+    System.out.print("E-mail [" + MemberResponse.getString("email") + "]: ");
     String updatedEmail = scan.nextLine();
-    if (updatedEmail.equals("")) updatedEmail = response.getString("email");
+    if (updatedEmail.equals("")) updatedEmail = MemberResponse.getString("email");
 
-    System.out.print("Membership Type [" + response.getString("membershipType") + "]: ");
+    System.out.print("Membership Type [" + MemberResponse.getString("membershipType") + "]: ");
     String updatedType = scan.nextLine();
-    if (updatedType.equals("")) updatedType = response.getString("membershipType");
+    if (updatedType.equals("")) updatedType = MemberResponse.getString("membershipType");
 
-    System.out.print("Membership Start Date [" + response.getString("membershipStartDate") + "]: ");
+    System.out.print("Membership Start Date [" + MemberResponse.getString("membershipStartDate") + "]: ");
     String updatedStartDate = scan.nextLine();
-    if (updatedStartDate.equals("")) updatedStartDate = response.getString("membershipStartDate");
+    if (updatedStartDate.equals("")) updatedStartDate = MemberResponse.getString("membershipStartDate");
 
-    System.out.print("Membership Length (in months) [" + response.getString("membershipLength") + "]: ");
+    System.out.print("Membership Length (in months) [" + MemberResponse.getString("membershipLength") + "]: ");
     int updatedLength = Integer.parseInt("0" +scan.nextLine());
-    if (updatedLength == 0) updatedLength = response.getInt("membershipLength");
+    if (updatedLength == 0) updatedLength = MemberResponse.getInt("membershipLength");
 
-    String updateResponse = HTTPClient.updateMemberById(response.getInt("id"),updatedName, updatedAddress, updatedEmail, updatedPhone,
+    String updateResponse = HTTPClient.updateMemberById(MemberResponse.getInt("id"),updatedName, updatedAddress, updatedEmail, updatedPhone,
         updatedStartDate, updatedLength, updatedType, "member");
     System.out.println(updateResponse);
   }
@@ -125,15 +161,19 @@ public class MemberMenu {
   public static void menuSelection() throws JSONException {
     while (true) {
       System.out.println("-".repeat(134));
-      System.out.print("Press \"E\" to edit, \"D\" to delete, or \"R\" to return to previous menu ");
+      System.out.print(" ".repeat(34) + "Press \"T\" to list last 15 Tournaments played by this member,\n");
+      System.out.print(" ".repeat(30) + "Press \"E\" to edit, \"D\" to delete, or \"R\" to return to previous menu ");
       String editCheck = scan.nextLine();
       System.out.println("-".repeat(134));
-      if (editCheck.equalsIgnoreCase("e")) {
+      if (editCheck.equalsIgnoreCase("E")) {
         editMember();
-      } else if (editCheck.equalsIgnoreCase("d")) {
+      } else if (editCheck.equalsIgnoreCase("D")) {
         deleteMember();
         break;
-      } else if (editCheck.equalsIgnoreCase("r")) {
+      } else if (editCheck.equalsIgnoreCase("R")) {
+        break;
+      } else if (editCheck.equalsIgnoreCase("T")) {
+        ListOfResultsByMember();
         break;
       } else {
         System.out.println("Invalid Selection");
@@ -152,8 +192,8 @@ public class MemberMenu {
       memberNumber = memberId.toString();
     }
     try {
-      response = new JSONObject(HTTPClient.searchById("member", memberNumber));
-      int n = response.length();
+      MemberResponse = new JSONObject(HTTPClient.searchById("member", memberNumber));
+      int n = MemberResponse.length();
       if (n > 0) {
         singleMemberDisplay();
         menuSelection();
@@ -201,7 +241,7 @@ public class MemberMenu {
       }
       System.out.println("-".repeat(134));
       while (true) {
-        System.out.print("To view or edit member info, " + Colours.RED_BOL + "enter # beside name" + Colours.RESET +
+        System.out.print(" ".repeat(19) + "To view or edit member info, " + Colours.RED_BOL + "enter # beside name" + Colours.RESET +
             " and press enter, or " + Colours.RED_BOL + "\"R\"" + Colours.RESET + " and enter to return: ");
         String memberNumber = scan.nextLine();
         System.out.println("-".repeat(134));
