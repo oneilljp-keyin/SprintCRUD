@@ -30,11 +30,11 @@ public class Tournament {
   public void setLocation(String location) {
     this.location = location;
   }
-  public void setStartDate(String start_date) {
-    this.startDate = start_date;
+  public void setStartDate(String startDate) {
+    this.startDate = startDate;
   }
-  public void setEndDate(String end_date) {
-    this.endDate = end_date;
+  public void setEndDate(String endDate) {
+    this.endDate = endDate;
   }
   public void setEntry_fee(Integer entry_fee) {
     this.entry_fee = entry_fee;

@@ -13,6 +13,17 @@ public class MainMenu {
 
   private static JSONArray responseData;
 
+  static String RankSuffix(int rank) {
+    if (rank % 10 == 1) {
+      return "st";
+    } else if (rank % 10 == 2) {
+      return "nd";
+    } else if (rank % 10 == 3) {
+      return "rd";
+    } else {
+      return "th";
+    }
+  }
 
   public static String JSONErrorConverter(JSONException e) {
     StringWriter sw = new StringWriter();
@@ -23,13 +34,16 @@ public class MainMenu {
   public static void main(String[] args) throws JSONException, IOException, InterruptedException {
     Scanner scan = new Scanner(System.in);
 
-    // Main Menu
+    // ************************************************************************************************************
+    //         Main Menu
+    // ************************************************************************************************************
     while (true) {
       System.out.println(" ".repeat(29) + "#".repeat(76));
       System.out.println(" ".repeat(29) + "#                  Welcome to to The Golf Club - Main Menu                 #");
       System.out.println(" ".repeat(29) + "#                  Press \"enter/return\" after every entry                  #");
       System.out.println(" ".repeat(29) + "#".repeat(76));
       System.out.println(" ".repeat(29) + "|             Press \"M\" for Members, Press \"T\" for Tournaments             |");
+      System.out.println(" ".repeat(29) + "|" + " ".repeat(74) + "|");
       System.out.println(" ".repeat(29) + "|                            Press \"Q\" to Quit                             |");
       System.out.println(" ".repeat(29) + "-".repeat(76));
       System.out.print(" ".repeat(67)); String categorySelection = scan.nextLine();
@@ -42,10 +56,12 @@ public class MainMenu {
           System.out.println(" ".repeat(29) + "#                  Press \"enter/return\" after every entry                  #");
           System.out.println(" ".repeat(29) + "#".repeat(76));
           System.out.println(" ".repeat(29) + "|                     Press \"N\" to enter a new member                      |");
+          System.out.println(" ".repeat(29) + "|" + " ".repeat(74) + "|");
+          System.out.println(" ".repeat(29) + "|                      Press \"A\" to list all members                       |");
           System.out.println(" ".repeat(29) + "|             Press \"F\" to search by first letter of the name              |");
           System.out.println(" ".repeat(29) + "|                       Press \"S\" to search by name                        |");
-          System.out.println(" ".repeat(29) + "|                      Press \"A\" to list all members                       |");
 //          System.out.println(" ".repeat(29) + "|                     Press \"M\" to search by member #                      |");
+          System.out.println(" ".repeat(29) + "|" + " ".repeat(74) + "|");
           System.out.println(" ".repeat(29) + "|                     Press \"R\" to return to main menu                     |");
           System.out.println(" ".repeat(29) + "-".repeat(76));
           System.out.print(" ".repeat(67)); String nextSelection = scan.nextLine();
@@ -88,7 +104,7 @@ public class MainMenu {
             } else if (nextSelection.equalsIgnoreCase("M")) {
               MemberMenu.getMemberInfoById(-1);
             } else {
-              System.out.println("Invalid selection");
+              System.out.println(" ".repeat(65) + "Invalid selection");
             }
             MemberMenu.getAllMembers(responseData);
           }
@@ -101,15 +117,17 @@ public class MainMenu {
           System.out.println(" ".repeat(29) + "#                  Press \"enter/return\" after every entry                  #");
           System.out.println(" ".repeat(29) + "#".repeat(76));
           System.out.println(" ".repeat(29) + "|                   Press \"N\" to enter a new tournament                    |");
-          System.out.println(" ".repeat(29) + "|                      Press \"L\" to search by location                     |");
+          System.out.println(" ".repeat(29) + "|" + " ".repeat(74) + "|");
           System.out.println(" ".repeat(29) + "|                    Press \"A\" to list all tournaments                     |");
-//          System.out.println(" ".repeat(29) + "|                       Press \"D\" to search by date                        |");
+          System.out.println(" ".repeat(29) + "|                       Press \"D\" to search by date                        |");
+          System.out.println(" ".repeat(29) + "|                      Press \"L\" to search by location                     |");
+          System.out.println(" ".repeat(29) + "|" + " ".repeat(74) + "|");
           System.out.println(" ".repeat(29) + "|                     Press \"R\" to return to main menu                     |");
           System.out.println(" ".repeat(29) + "-".repeat(76));
           System.out.print(" ".repeat(67)); String nextSelection = scan.nextLine();
-          if (nextSelection.equalsIgnoreCase("r")) {
+          if (nextSelection.equalsIgnoreCase("R")) {
             break;
-          } else if (nextSelection.equalsIgnoreCase("n")) {
+          } else if (nextSelection.equalsIgnoreCase("N")) {
             TournamentMenu.newTournament();
           } else {
             JSONObject response;
@@ -123,16 +141,16 @@ public class MainMenu {
               } catch (JSONException e) {
                 System.out.println(JSONErrorConverter(e));
               }
-//            // Search by Date
-//            } else if (nextSelection.equalsIgnoreCase("D")) {
-//              System.out.print("Enter date of tournament: ");
-//              String dateString = scan.nextLine();
-//              try {
-//                response = new JSONObject(HTTPClient.searchByDate("tournament", dateString));
-//                responseData = response.getJSONObject("_embedded").getJSONArray("tournament");
-//              } catch (JSONException e) {
-//                System.out.println(JSONErrorConverter(e));
-//              }
+            // Search by Date
+            } else if (nextSelection.equalsIgnoreCase("D")) {
+              System.out.print(" ".repeat(42) + "Enter date of tournament [YYYY-MM-DD]: ");
+              String dateString = scan.nextLine();
+              try {
+                response = new JSONObject(HTTPClient.searchByDate("tournament", dateString));
+                responseData = response.getJSONObject("_embedded").getJSONArray("tournament");
+              } catch (JSONException e) {
+                System.out.println(JSONErrorConverter(e));
+              }
             // List all tournaments
             } else if (nextSelection.equalsIgnoreCase("A")) {
               try {
@@ -144,7 +162,7 @@ public class MainMenu {
             } else if (nextSelection.equalsIgnoreCase("M")) {
               TournamentMenu.getTournamentInfoById(-1);
             } else {
-              System.out.println("Invalid selection");
+              System.out.println(" ".repeat(65) + "Invalid selection");
             }
             TournamentMenu.getAllTournaments(responseData);
           }
@@ -152,7 +170,7 @@ public class MainMenu {
       } else if (categorySelection.equalsIgnoreCase("q")){
         break;
       } else {
-        System.out.println("Invalid Selection");
+        System.out.println(" ".repeat(65) + "Invalid Selection");
       }
     }
     scan.close();

@@ -36,7 +36,7 @@ public class TournamentController {
       tournament.setEndDate(updateTournament.getEndDate());
       tournament.setEntry_fee(updateTournament.getEntry_fee());
       tournament.setTotal_cash_prize(updateTournament.getTotal_cash_prize());
-      tournamentRepository.save(updateTournament);
+      tournamentRepository.save(tournament);
       return ("Tournament at \"" + tournament.getLocation() +"\" starting on " + tournament.getStartDate() + " has been updated");
     }).orElseGet(() -> {
       tournamentRepository.save(updateTournament);

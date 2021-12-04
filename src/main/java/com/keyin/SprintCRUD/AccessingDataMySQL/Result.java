@@ -11,7 +11,10 @@ public class Result {
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name="id")
   private Integer Id;
+  @Column(columnDefinition = "integer default 0")
   private Integer result;
+  @Column(columnDefinition = "integer default 0")
+  private Integer cashPrize;
   @ManyToOne
   @NotNull
   @JoinColumn(name="tournamentId", referencedColumnName = "id", updatable=false, insertable=false)
@@ -27,6 +30,9 @@ public class Result {
   public Integer getResult() {
     return result;
   }
+  public Integer getCashPrize() {
+    return cashPrize;
+  }
   public Tournament getTournament() {
     return tournament;
   }
@@ -39,6 +45,9 @@ public class Result {
   }
   public void setResult(Integer result) {
     this.result = result;
+  }
+  public void setCashPrize(Integer cashPrize) {
+    this.cashPrize = cashPrize;
   }
   public void setTournament(Tournament tournament) {
     this.tournament = tournament;

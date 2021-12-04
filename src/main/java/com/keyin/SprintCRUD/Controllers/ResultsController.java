@@ -24,6 +24,7 @@ public class ResultsController {
   public @ResponseBody String addNewResult (@RequestBody Result newResult) {
     Result n = new Result();
     n.setResult(newResult.getResult());
+    n.setCashPrize(newResult.getCashPrize());
     n.setMember(newResult.getMember());
     n.setTournament(newResult.getTournament());
     resultRepository.save(n);
@@ -35,6 +36,7 @@ public class ResultsController {
     return resultRepository.findById(id)
     .map(result -> {
       result.setResult(updateResult.getResult());
+      result.setCashPrize(updateResult.getCashPrize());
       result.setMember(updateResult.getMember());
       result.setTournament(updateResult.getTournament());
       resultRepository.save(updateResult);
@@ -52,17 +54,14 @@ public class ResultsController {
   }
 
   @GetMapping(path="/member/{id}")
-  public @ResponseBody Iterable<Result> getAllResults(@PathVariable int id) {
+  public @ResponseBody Iterable<Result> getAllResultsByMemberId(@PathVariable int id) {
     Optional<Member> searchMember = memberRepository.findById(id);
     return resultRepository.findByMember(searchMember);
   }
 
-
   @GetMapping(path="/tournament/{id}")
-  public @ResponseBody
-  Iterable<Result> getAllResultsByTournamentId(@PathVariable int id) {
+  public @ResponseBody Iterable<Result> getAllResultsByTournamentId(@PathVariable int id) {
     Optional<Tournament> searchTournament = tournamentRepository.findById(id);
     return resultRepository.findByTournamentOrderByResult(searchTournament);
   }
-
 }

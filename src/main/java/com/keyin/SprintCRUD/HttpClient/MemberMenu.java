@@ -1,6 +1,5 @@
 package com.keyin.SprintCRUD.HttpClient;
 
-import com.keyin.SprintCRUD.AccessingDataMySQL.MemberRepository;
 import com.keyin.SprintCRUD.Utilities.Colours;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,7 +77,7 @@ public class MemberMenu {
           " [" + MemberResponse.getString("id") + "]? (Type \"Yes\" to Confirm): ");
       String deleteMember = scan.nextLine();
       if (deleteMember.equalsIgnoreCase("yes")) {
-        String deleteResponse = HTTPClient.deleteById("member", MemberResponse.getString("id"));
+        String deleteResponse = HTTPClient.deleteById("member", MemberResponse.getInt("id"));
         System.out.println(deleteResponse);
       } else {
         System.out.println("Member NOT deleted");
@@ -250,12 +249,6 @@ public class MemberMenu {
         } else {
           getMemberInfoById(Integer.parseInt(memberNumber));
         }
-//        try {
-//          int numberCheck = Integer.parseInt(memberNumber);
-//        } catch (NumberFormatException nfe) {
-//          break;
-//        } finally {
-//        }
       }
     }
 

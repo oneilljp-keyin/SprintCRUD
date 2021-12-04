@@ -42,8 +42,6 @@ class SprintCrudApplicationTests {
 	@Test
 	public void whenGetAllMembers_thenOK() {
 		Response response = RestAssured.get(API_ROOT + "/all");
-		System.out.println(response);
-		System.out.println(HttpStatus.OK.value() + " - " + response.getStatusCode());
 		Assertions.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
 	}
 

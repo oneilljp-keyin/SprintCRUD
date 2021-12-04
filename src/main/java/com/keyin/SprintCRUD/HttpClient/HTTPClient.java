@@ -24,9 +24,9 @@ public class HTTPClient {
     return null;
   }
 
-  // *****************************************************************
-  //                     HTTP Client Requests
-  // *****************************************************************
+  // ************************************************************************************************************
+  //         HTTP Client Requests
+  // ************************************************************************************************************
 
   private static String httpGetRequest(String httpURL) {
     HttpRequest InfoRequest = HttpRequest.newBuilder().uri(URI.create(httpURL)).build();
@@ -50,21 +50,21 @@ public class HTTPClient {
     return sendRequest(memberDeleteRequest);
   }
 
-  // *****************************************************************
-  //                      Shared URI Constructors
-  // *****************************************************************
+  // ************************************************************************************************************
+  //         Shared URI Constructors
+  // ************************************************************************************************************
 
   public static String searchById(String category, String id) {
     return httpGetRequest("http://localhost:8080/" + category + "/" + id);
   }
 
-  public static String deleteById(String category, String id) {
+  public static String deleteById(String category, int id) {
     return httpDeleteRequest("http://localhost:8080/" + category + "/delete?id=" + id);
   }
 
-  // *****************************************************************
-  //                      Member URI Constructors
-  // *****************************************************************
+  // ************************************************************************************************************
+  //         Member URI Constructors
+  // ************************************************************************************************************
 
   public static String getAllMembers(String category) {
     return httpGetRequest("http://localhost:8080/" + category + "?sort=name");
@@ -101,9 +101,9 @@ public class HTTPClient {
     return httpPutRequest("http://localhost:8080/" + category +"/update/" + id, jsonPayload);
   }
 
-  // *****************************************************************
-  //                    Tournament URI Constructors
-  // *****************************************************************
+  // ************************************************************************************************************
+  //         Tournament URI Constructors
+  // ************************************************************************************************************
 
   public static String getAllTournaments(String category) {
     return httpGetRequest("http://localhost:8080/" + category + "?sort=startDate");
@@ -117,37 +117,37 @@ public class HTTPClient {
     return httpGetRequest("http://localhost:8080/" + category + "/search/findByStartDate?searchDate=" + searchDate);
   }
 
-  public static String insertNewTournament(String location, String start_date, String end_date,
+  public static String insertNewTournament(String location, String startDate, String endDate,
                                            String entry_fee, String total_cash_prize) {
 
-    String jsonPayloadString = "{\"location\": \"" + location + "\",\"start_date\": \"" + start_date +
-        "\",\"end_date\": \"" + end_date + "\",\"entry_fee\": \"" + entry_fee +
+    String jsonPayloadString = "{\"location\": \"" + location + "\",\"start_date\": \"" + startDate +
+        "\",\"end_date\": \"" + endDate + "\",\"entry_fee\": \"" + entry_fee +
         "\",\"total_cash_prize\": \"" + total_cash_prize + "\"}";
     HttpRequest.BodyPublisher jsonPayload = HttpRequest.BodyPublishers.ofString(jsonPayloadString);
 
     return httpPostRequest("http://localhost:8080/tournament/add", jsonPayload);
   }
 
-  public static String updateTournamentById(Integer id, String location, String start_date, String end_date,
+  public static String updateTournamentById(Integer id, String location, String startDate, String endDate,
                                             String entry_fee, String total_cash_prize) {
-    String jsonPayloadString = "{\"location\": \"" + location + "\",\"start_date\": \"" + start_date +
-        "\",\"end_date\": \"" + end_date + "\",\"entry_fee\": \"" + entry_fee +
+    String jsonPayloadString = "{\"location\": \"" + location + "\",\"startDate\": \"" + startDate +
+        "\",\"endDate\": \"" + endDate + "\",\"entry_fee\": \"" + entry_fee +
         "\",\"total_cash_prize\": \"" + total_cash_prize + "\"}";
     HttpRequest.BodyPublisher jsonPayload = HttpRequest.BodyPublishers.ofString(jsonPayloadString);
 
     return httpPutRequest("http://localhost:8080/tournament/update/" + id, jsonPayload);
   }
 
-  // *****************************************************************
-  //                      Result URI Constructors
-  // *****************************************************************
+  // ************************************************************************************************************
+  //         Result URI Constructors
+  // ************************************************************************************************************
 
-  public static String getResultsByMemberId(String category, Integer memberId) {
+  public static String getResultsByMemberId(String category, int memberId) {
     return httpGetRequest("http://localhost:8080/" + category + "/member/" + memberId);
   }
 
-  public static String getResultsByTournamentId(int tournamentId) {
-    return null;
+  public static String getResultsByTournamentId(String category, int tournamentId) {
+    return httpGetRequest("http://localhost:8080/" + category + "/tournament/" + tournamentId);
   }
 
   public static String insertResult(int tournamentId, int member_id, int result) {
